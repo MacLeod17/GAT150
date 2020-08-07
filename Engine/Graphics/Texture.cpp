@@ -1,12 +1,13 @@
 #include "pch.h"
 #include "Texture.h"
 #include "Math/Vector2.h"
+#include "Graphics/Renderer.h"
 
 namespace gk
 {
-    bool Texture::Create(const std::string& name, SDL_Renderer* renderer)
+    bool Texture::Create(const std::string& name, void* renderer)
     {
-        m_renderer = renderer;
+        m_renderer = static_cast<Renderer*>(renderer)->m_renderer;
         
         SDL_Surface* surface = IMG_Load(name.c_str());
         if (surface == nullptr)
@@ -25,7 +26,7 @@ namespace gk
 
     void Texture::Destroy()
     {
-        delete m_texture;
+        SDL_DestroyTexture(m_texture);
     }
 
     void Texture::Draw(const Vector2& position, const Vector2& scale, const float angle)
