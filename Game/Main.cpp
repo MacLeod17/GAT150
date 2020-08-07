@@ -38,6 +38,7 @@ int main(int, char**)
 		angle += 1.0f;
 		texture1->Draw(position, { 1, 1 }, angle);
 
+		inputSystem.Update();
 		if (inputSystem.GetButtonState(SDL_SCANCODE_LEFT) == gk::InputSystem::eButtonState::HELD)
 		{
 			position.x -= 5.0f;
@@ -46,7 +47,6 @@ int main(int, char**)
 		{
 			position.x += 5.0f;
 		}
-		inputSystem.Update();
 
 		renderer.EndFrame();
 	}
