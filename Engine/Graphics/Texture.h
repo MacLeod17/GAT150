@@ -14,6 +14,7 @@ namespace gk
 		void Destroy() override;
 
 		void Draw(const Vector2& position, const Vector2& scale, const float angle);
+		void Draw(const SDL_Rect& source, const Vector2& position, const Vector2& scale, const float angle);
 		Vector2 GetSize();
 
 	protected:

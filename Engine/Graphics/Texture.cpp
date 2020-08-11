@@ -43,6 +43,20 @@ namespace gk
         SDL_RenderCopyEx(m_renderer, m_texture, NULL, &rect, angle, NULL, SDL_FLIP_NONE);
     }
 
+    void Texture::Draw(const SDL_Rect& source, const Vector2& position, const Vector2& scale, const float angle)
+    {
+        Vector2 size = { source.w, source.h };
+        size *= scale;
+
+        SDL_Rect rect;
+        rect.x = static_cast<int>(position.x);
+        rect.y = static_cast<int>(position.y);
+        rect.w = static_cast<int>(size.x);
+        rect.h = static_cast<int>(size.y);
+
+        SDL_RenderCopyEx(m_renderer, m_texture, &source, &rect, angle, NULL, SDL_FLIP_NONE);
+    }
+
     gk::Vector2 Texture::GetSize()
     {
         int w, h;

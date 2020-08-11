@@ -18,5 +18,6 @@
 #include <map>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <chrono>
 
 #endif //PCH_H
