@@ -4,6 +4,7 @@
 #include "Graphics/Texture.h"
 #include "Graphics/Renderer.h"
 #include "Input/InputSystem.h"
+#include "Math/Math.h"
 #include "Resources/ResourceManager.h"
 
 gk::InputSystem inputSystem;
@@ -30,6 +31,7 @@ int main(int, char**)
 
 	float angle{ 0 };
 	gk::Vector2 position{ 400, 300 };
+	gk::Vector2 velocity{ 0, 0 };
 
 	SDL_Event event;
 
@@ -52,33 +54,43 @@ int main(int, char**)
 		{
 			quit = true;
 		}
+
+		//Player Controls
 		if (inputSystem.GetButtonState(SDL_SCANCODE_LEFT)	== gk::InputSystem::eButtonState::HELD || 
 			inputSystem.GetButtonState(SDL_SCANCODE_A)		== gk::InputSystem::eButtonState::HELD)
 		{
-			position.x -= 200.0f * timer.DeltaTime();
+			angle -= 120.0f * timer.DeltaTime();
 		}
 		if (inputSystem.GetButtonState(SDL_SCANCODE_RIGHT)	== gk::InputSystem::eButtonState::HELD || 
 			inputSystem.GetButtonState(SDL_SCANCODE_D)		== gk::InputSystem::eButtonState::HELD)
 		{
-			position.x += 200.0f * timer.DeltaTime();
+			angle += 120.0f * timer.DeltaTime();
 		}
+
+		//Physics
+		gk::Vector2 force{ 0,0 };
+
 		if (inputSystem.GetButtonState(SDL_SCANCODE_UP)		== gk::InputSystem::eButtonState::HELD || 
 			inputSystem.GetButtonState(SDL_SCANCODE_W)		== gk::InputSystem::eButtonState::HELD)
 		{
-			position.y -= 200.0f * timer.DeltaTime();
+			force = gk::Vector2::forward * 1000;
 		}
 		if (inputSystem.GetButtonState(SDL_SCANCODE_DOWN)	== gk::InputSystem::eButtonState::HELD || 
 			inputSystem.GetButtonState(SDL_SCANCODE_S)		== gk::InputSystem::eButtonState::HELD)
 		{
-			position.y += 200.0f * timer.DeltaTime();
+			force = -(gk::Vector2::forward * 1000);
 		}
+		
+		force = gk::Vector2::Rotate(force, gk::DegreesToRadians(angle));
+		velocity += force * timer.DeltaTime();
+		velocity *= 0.95f;
+		position += velocity * timer.DeltaTime();
 
 		//Draw
 		renderer.BeginFrame();
 
-		angle += 180 * timer.DeltaTime();
 		background->Draw({ 0, 0 }, { 1, 1 }, 0);
-		car->Draw({ 0, 16, 64, 144 }, position, { 1, 1 }, 0);
+		car->Draw({ 0, 16, 64, 144 }, position, { 1, 1 }, angle);
 
 		renderer.EndFrame();
 	}
