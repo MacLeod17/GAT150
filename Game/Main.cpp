@@ -1,37 +1,64 @@
 
 #include "pch.h"
-#include "Core/Timer.h"
 #include "Graphics/Texture.h"
-#include "Graphics/Renderer.h"
-#include "Input/InputSystem.h"
-#include "Math/Math.h"
-#include "Resources/ResourceManager.h"
+#include "Engine.h"
+#include "Objects/GameObject.h"
+#include "Components/PhysicsComponent.h"
+#include "Components/SpriteComponent.h"
+#include "Core/Json.h"
 
-gk::InputSystem inputSystem;
-gk::ResourceManager resourcemanager;
-gk::Renderer renderer;
-
-gk::FrameTimer timer;
+gk::Engine engine;
+gk::GameObject player;
 
 int main(int, char**)
 {
-	/*
-	gk::Timer timer;
-	for (size_t i = 0; i < 10000; i++) { std::sqrt(rand() % 100); }
-	std::cout << timer.ElapsedSeconds() << std::endl;
-	*/
+	rapidjson::Document document;
+	gk::json::Load("json.txt", document);
+
+	std::string str;
+	gk::json::Get(document, "string", str);
+	std::cout << str << std::endl;
+
+	bool b;
+	gk::json::Get(document, "bool", b);
+	std::cout << b << std::endl;
+
+	int i1;
+	gk::json::Get(document, "integer1", i1);
+	std::cout << i1 << std::endl;
+
+	int i2;
+	gk::json::Get(document, "integer2", i2);
+	std::cout << i2 << std::endl;
+
+	float f;
+	gk::json::Get(document, "float", f);
+	std::cout << f << std::endl;
+
+	gk::Vector2 v2;
+	gk::json::Get(document, "vector2", v2);
+	std::cout << v2 << std::endl;
+
+	gk::Color color;
+	gk::json::Get(document, "color", color);
+	std::cout << color << std::endl;
+
+	return 0;
+
+	engine.Startup();
+
+	player.Create(&engine);
+	player.m_transform.position = { 400, 300 };
+	player.m_transform.angle = 90;
+	gk::Component* component = new gk::PhysicsComponent;
+	player.AddComponent(component);
+	component->Create();
+
+	component = new gk::SpriteComponent;
+	player.AddComponent(component);
+	component->Create();
 	
-	renderer.Startup();
-	renderer.Create("Kilpack");
-	resourcemanager.Startup();
-	inputSystem.Startup();
-
-	gk::Texture* car = resourcemanager.Get<gk::Texture>("cars.png", &renderer);
-	gk::Texture* background = resourcemanager.Get<gk::Texture>("background.png", &renderer);
-
-	float angle{ 0 };
-	gk::Vector2 position{ 400, 300 };
-	gk::Vector2 velocity{ 0, 0 };
+	gk::Texture* background = engine.GetSystem<gk::ResourceManager>()->Get<gk::Texture>("background.png", engine.GetSystem<gk::Renderer>());
 
 	SDL_Event event;
 
@@ -47,57 +74,53 @@ int main(int, char**)
 		}
 		
 		//Update
-		timer.Tick();
-		inputSystem.Update();
+		engine.Update();
+		player.Update();
 
-		if (inputSystem.GetButtonState(SDL_SCANCODE_ESCAPE) == gk::InputSystem::eButtonState::PRESSED)
+		if (engine.GetSystem<gk::InputSystem>()->GetButtonState(SDL_SCANCODE_ESCAPE) == gk::InputSystem::eButtonState::PRESSED)
 		{
 			quit = true;
 		}
 
 		//Player Controls
-		if (inputSystem.GetButtonState(SDL_SCANCODE_LEFT)	== gk::InputSystem::eButtonState::HELD || 
-			inputSystem.GetButtonState(SDL_SCANCODE_A)		== gk::InputSystem::eButtonState::HELD)
+		if (engine.GetSystem<gk::InputSystem>()->GetButtonState(SDL_SCANCODE_LEFT)	== gk::InputSystem::eButtonState::HELD ||
+			engine.GetSystem<gk::InputSystem>()->GetButtonState(SDL_SCANCODE_A)		== gk::InputSystem::eButtonState::HELD)
 		{
-			angle -= 120.0f * timer.DeltaTime();
+			player.m_transform.angle -= 120.0f * engine.GetTimer().DeltaTime();
 		}
-		if (inputSystem.GetButtonState(SDL_SCANCODE_RIGHT)	== gk::InputSystem::eButtonState::HELD || 
-			inputSystem.GetButtonState(SDL_SCANCODE_D)		== gk::InputSystem::eButtonState::HELD)
+		if (engine.GetSystem<gk::InputSystem>()->GetButtonState(SDL_SCANCODE_RIGHT)	== gk::InputSystem::eButtonState::HELD ||
+			engine.GetSystem<gk::InputSystem>()->GetButtonState(SDL_SCANCODE_D)		== gk::InputSystem::eButtonState::HELD)
 		{
-			angle += 120.0f * timer.DeltaTime();
+			player.m_transform.angle += 120.0f * engine.GetTimer().DeltaTime();
 		}
 
 		//Physics
 		gk::Vector2 force{ 0,0 };
 
-		if (inputSystem.GetButtonState(SDL_SCANCODE_UP)		== gk::InputSystem::eButtonState::HELD || 
-			inputSystem.GetButtonState(SDL_SCANCODE_W)		== gk::InputSystem::eButtonState::HELD)
+		if (engine.GetSystem<gk::InputSystem>()->GetButtonState(SDL_SCANCODE_UP)		== gk::InputSystem::eButtonState::HELD ||
+			engine.GetSystem<gk::InputSystem>()->GetButtonState(SDL_SCANCODE_W)		== gk::InputSystem::eButtonState::HELD)
 		{
 			force = gk::Vector2::forward * 1000;
 		}
-		if (inputSystem.GetButtonState(SDL_SCANCODE_DOWN)	== gk::InputSystem::eButtonState::HELD || 
-			inputSystem.GetButtonState(SDL_SCANCODE_S)		== gk::InputSystem::eButtonState::HELD)
+		if (engine.GetSystem<gk::InputSystem>()->GetButtonState(SDL_SCANCODE_DOWN)	== gk::InputSystem::eButtonState::HELD ||
+			engine.GetSystem<gk::InputSystem>()->GetButtonState(SDL_SCANCODE_S)		== gk::InputSystem::eButtonState::HELD)
 		{
 			force = -(gk::Vector2::forward * 1000);
 		}
 		
-		force = gk::Vector2::Rotate(force, gk::DegreesToRadians(angle));
-		velocity += force * timer.DeltaTime();
-		velocity *= 0.95f;
-		position += velocity * timer.DeltaTime();
+		force = gk::Vector2::Rotate(force, gk::DegreesToRadians(player.m_transform.angle));
 
 		//Draw
-		renderer.BeginFrame();
+		engine.GetSystem<gk::Renderer>()->BeginFrame();
 
 		background->Draw({ 0, 0 }, { 1, 1 }, 0);
-		car->Draw({ 0, 16, 64, 144 }, position, { 1, 1 }, angle);
+		
+		player.Draw();
 
-		renderer.EndFrame();
+		engine.GetSystem<gk::Renderer>()->EndFrame();
 	}
 
-	inputSystem.Shutdown();
-	renderer.Shutdown();
-	SDL_Quit();
+	engine.Shutdown();
 
 	return 0;
 }

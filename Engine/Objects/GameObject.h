@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Engine.h"
 #include "Math/Transform.h"
 #include "Object.h"
 #include <vector>
@@ -37,8 +38,11 @@ namespace gk
 		friend class Component;
 		friend class PhysicsComponent;
 
-	protected:
+	public:
 		Transform m_transform;
+		Engine* m_engine;
+
+	protected:
 		std::vector<Component*> m_components;
 	};
 }

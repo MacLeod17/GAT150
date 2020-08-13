@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SDL.h>
 #include <Windows.h>
 #include <iostream>
 
@@ -40,6 +41,7 @@ namespace gk
 
 		operator SDL_Color() const { return Pack888(); }
 		friend std::istream& operator >> (std::istream& stream, Color& c);
+		friend std::ostream& operator << (std::ostream& stream, Color& c);
 
 		SDL_Color Pack888() const;
 

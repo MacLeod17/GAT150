@@ -5,7 +5,9 @@ namespace gk
 {
     bool PhysicsComponent::Create(void* data)
     {
-        return false;
+        m_velocity = gk::Vector2::forward * 100;
+        
+        return true;
     }
 
     void PhysicsComponent::Destroy()
@@ -15,9 +17,9 @@ namespace gk
 
     void PhysicsComponent::Update()
     {
-        m_velocity += m_force;// *timer.DeltaTime();
+        m_velocity += m_force * m_owner->m_engine->GetTimer().DeltaTime();
         m_velocity *= m_drag;
-        m_owner->m_transform.position += m_velocity;// *timer.DeltaTime();
+        m_owner->m_transform.position += m_velocity * m_owner->m_engine->GetTimer().DeltaTime();
     }
 }
 
