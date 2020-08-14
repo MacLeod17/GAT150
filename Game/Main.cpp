@@ -3,6 +3,7 @@
 #include "Graphics/Texture.h"
 #include "Engine.h"
 #include "Objects/GameObject.h"
+#include "Components/PlayerComponent.h"
 #include "Components/PhysicsComponent.h"
 #include "Components/SpriteComponent.h"
 #include "Core/Json.h"
@@ -12,6 +13,7 @@ gk::GameObject player;
 
 int main(int, char**)
 {
+	/*
 	rapidjson::Document document;
 	gk::json::Load("json.txt", document);
 
@@ -44,19 +46,27 @@ int main(int, char**)
 	std::cout << color << std::endl;
 
 	return 0;
+	*/
 
 	engine.Startup();
 
 	player.Create(&engine);
 	player.m_transform.position = { 400, 300 };
-	player.m_transform.angle = 90;
-	gk::Component* component = new gk::PhysicsComponent;
-	player.AddComponent(component);
-	component->Create();
+	player.m_transform.angle = 0;
 
-	component = new gk::SpriteComponent;
-	player.AddComponent(component);
-	component->Create();
+	{
+		gk::Component* component = new gk::PhysicsComponent;
+		player.AddComponent(component);
+		component->Create();
+
+		component = new gk::SpriteComponent;
+		player.AddComponent(component);
+		component->Create();
+
+		component = new gk::PlayerComponent;
+		player.AddComponent(component);
+		component->Create();
+	}
 	
 	gk::Texture* background = engine.GetSystem<gk::ResourceManager>()->Get<gk::Texture>("background.png", engine.GetSystem<gk::Renderer>());
 
@@ -81,34 +91,6 @@ int main(int, char**)
 		{
 			quit = true;
 		}
-
-		//Player Controls
-		if (engine.GetSystem<gk::InputSystem>()->GetButtonState(SDL_SCANCODE_LEFT)	== gk::InputSystem::eButtonState::HELD ||
-			engine.GetSystem<gk::InputSystem>()->GetButtonState(SDL_SCANCODE_A)		== gk::InputSystem::eButtonState::HELD)
-		{
-			player.m_transform.angle -= 120.0f * engine.GetTimer().DeltaTime();
-		}
-		if (engine.GetSystem<gk::InputSystem>()->GetButtonState(SDL_SCANCODE_RIGHT)	== gk::InputSystem::eButtonState::HELD ||
-			engine.GetSystem<gk::InputSystem>()->GetButtonState(SDL_SCANCODE_D)		== gk::InputSystem::eButtonState::HELD)
-		{
-			player.m_transform.angle += 120.0f * engine.GetTimer().DeltaTime();
-		}
-
-		//Physics
-		gk::Vector2 force{ 0,0 };
-
-		if (engine.GetSystem<gk::InputSystem>()->GetButtonState(SDL_SCANCODE_UP)		== gk::InputSystem::eButtonState::HELD ||
-			engine.GetSystem<gk::InputSystem>()->GetButtonState(SDL_SCANCODE_W)		== gk::InputSystem::eButtonState::HELD)
-		{
-			force = gk::Vector2::forward * 1000;
-		}
-		if (engine.GetSystem<gk::InputSystem>()->GetButtonState(SDL_SCANCODE_DOWN)	== gk::InputSystem::eButtonState::HELD ||
-			engine.GetSystem<gk::InputSystem>()->GetButtonState(SDL_SCANCODE_S)		== gk::InputSystem::eButtonState::HELD)
-		{
-			force = -(gk::Vector2::forward * 1000);
-		}
-		
-		force = gk::Vector2::Rotate(force, gk::DegreesToRadians(player.m_transform.angle));
 
 		//Draw
 		engine.GetSystem<gk::Renderer>()->BeginFrame();

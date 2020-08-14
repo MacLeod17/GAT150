@@ -5,8 +5,6 @@ namespace gk
 {
     bool PhysicsComponent::Create(void* data)
     {
-        m_velocity = gk::Vector2::forward * 100;
-        
         return true;
     }
 
