@@ -50,9 +50,11 @@ int main(int, char**)
 
 	engine.Startup();
 
+	rapidjson::Document document;
+
 	player.Create(&engine);
-	player.m_transform.position = { 400, 300 };
-	player.m_transform.angle = 0;
+	gk::json::Load("player.txt", document);
+	player.Read(document);
 
 	{
 		gk::Component* component = new gk::PhysicsComponent;
@@ -61,6 +63,8 @@ int main(int, char**)
 
 		component = new gk::SpriteComponent;
 		player.AddComponent(component);
+		gk::json::Load("sprite.txt", document);
+		component->Read(document);
 		component->Create();
 
 		component = new gk::PlayerComponent;

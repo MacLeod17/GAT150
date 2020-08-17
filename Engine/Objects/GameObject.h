@@ -15,6 +15,8 @@ namespace gk
 		virtual bool Create(void* data = nullptr) override;
 		virtual void Destroy() override;
 
+		virtual void Read(const rapidjson::Value& value);
+
 		void Update();
 		void Draw();
 

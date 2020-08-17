@@ -15,6 +15,8 @@
 #include "Math/Random.h"
 #include "Math/Transform.h"
 
+#include "Core/Assert.h"
+
 #include <SDL.h>
 #include <SDL_image.h>
 
@@ -25,5 +27,6 @@
 #include <fstream>
 #include <map>
 #include <chrono>
+#include <cassert>
 
 #endif //PCH_H
