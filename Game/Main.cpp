@@ -7,9 +7,10 @@
 #include "Components/PhysicsComponent.h"
 #include "Components/SpriteComponent.h"
 #include "Core/Json.h"
+#include "Core/Factory.h"
 
 gk::Engine engine;
-gk::GameObject player;
+gk::Factory<gk::Object, std::string> objectFactory;
 
 int main(int, char**)
 {
@@ -50,25 +51,32 @@ int main(int, char**)
 
 	engine.Startup();
 
+	objectFactory.Register("GameObject", gk::Object::Instantiate<gk::GameObject>);
+	objectFactory.Register("PhysicsComponent", gk::Object::Instantiate<gk::PhysicsComponent>);
+	objectFactory.Register("SpriteComponent", gk::Object::Instantiate<gk::SpriteComponent>);
+	objectFactory.Register("PlayerComponent", gk::Object::Instantiate<gk::PlayerComponent>);
+
+	gk::GameObject* player = objectFactory.Create<gk::GameObject>("GameObject");
+
 	rapidjson::Document document;
 
-	player.Create(&engine);
+	player->Create(&engine);
 	gk::json::Load("player.txt", document);
-	player.Read(document);
+	player->Read(document);
 
 	{
-		gk::Component* component = new gk::PhysicsComponent;
-		player.AddComponent(component);
+		gk::Component* component = objectFactory.Create<gk::Component>("PhysicsComponent");
+		player->AddComponent(component);
 		component->Create();
 
-		component = new gk::SpriteComponent;
-		player.AddComponent(component);
+		component = objectFactory.Create<gk::Component>("SpriteComponent");
+		player->AddComponent(component);
 		gk::json::Load("sprite.txt", document);
 		component->Read(document);
 		component->Create();
 
-		component = new gk::PlayerComponent;
-		player.AddComponent(component);
+		component = objectFactory.Create<gk::Component>("PlayerComponent");
+		player->AddComponent(component);
 		component->Create();
 	}
 	
@@ -89,7 +97,7 @@ int main(int, char**)
 		
 		//Update
 		engine.Update();
-		player.Update();
+		player->Update();
 
 		if (engine.GetSystem<gk::InputSystem>()->GetButtonState(SDL_SCANCODE_ESCAPE) == gk::InputSystem::eButtonState::PRESSED)
 		{
@@ -101,7 +109,7 @@ int main(int, char**)
 
 		background->Draw({ 0, 0 }, { 1, 1 }, 0);
 		
-		player.Draw();
+		player->Draw();
 
 		engine.GetSystem<gk::Renderer>()->EndFrame();
 	}
