@@ -6,7 +6,9 @@ namespace gk
 {
     bool PlayerComponent::Create(void* data)
     {
-        return false;
+		m_owner = static_cast<GameObject*>(data);
+		
+		return true;
     }
 
     void PlayerComponent::Destroy()

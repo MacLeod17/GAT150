@@ -16,6 +16,7 @@ namespace gk
 		virtual void Destroy() override;
 
 		virtual void Read(const rapidjson::Value& value);
+		void ReadComponents(const rapidjson::Value& value);
 
 		void Update();
 		void Draw();
@@ -41,6 +42,7 @@ namespace gk
 		friend class PhysicsComponent;
 
 	public:
+		std::string m_name;
 		Transform m_transform;
 		Engine* m_engine;
 

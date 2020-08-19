@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Components/Component.h"
 #include "Components/RenderComponent.h"
+#include "ObjectFactory.h"
 
 namespace gk
 {
@@ -19,9 +20,37 @@ namespace gk
 
     void GameObject::Read(const rapidjson::Value& value)
     {
+        gk::json::Get(value, "name", m_name);
         gk::json::Get(value, "position", m_transform.position);
         gk::json::Get(value, "scale", m_transform.scale);
         gk::json::Get(value, "angle", m_transform.angle);
+
+        const rapidjson::Value& componentsValue = value["Components"];
+        if (componentsValue.IsArray())
+        {
+            ReadComponents(componentsValue);
+        }
+    }
+
+    void GameObject::ReadComponents(const rapidjson::Value& value)
+    {
+        for (rapidjson::SizeType i = 0; i < value.Size(); i++)
+        {
+            const rapidjson::Value& componentValue = value[i];
+            if (componentValue.IsObject())
+            {
+                std::string typeName;
+                json::Get(componentValue, "type", typeName);
+
+                Component* component = ObjectFactory::Instance().Create<Component>(typeName);
+                if (component)
+                {
+                    component->Create(this);
+                    component->Read(componentValue);
+                    AddComponent(component);
+                }
+            }
+        }
     }
 
     void GameObject::Update()
@@ -43,7 +72,6 @@ namespace gk
 
     void GameObject::AddComponent(Component* component)
     {
-        component->m_owner = this;
         m_components.push_back(component);
     }
 
