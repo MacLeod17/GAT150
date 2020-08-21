@@ -17,6 +17,7 @@ namespace gk
 
 	protected:
 		std::string m_textureName;
+		Vector2 m_origin{ 0, 0 };
 		SDL_Rect m_rect{ 0, 0, 0, 0 };
 	};
 }

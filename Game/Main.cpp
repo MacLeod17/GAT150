@@ -14,13 +14,14 @@ gk::Scene scene;
 int main(int, char**)
 {
 	engine.Startup();
-	scene.Create(&engine);
 
 	gk::ObjectFactory::Instance().Initialize();
 	gk::ObjectFactory::Instance().Register("PlayerComponent", gk::Object::Instantiate<gk::PlayerComponent>);
 
 	rapidjson::Document document;
 	gk::json::Load("scene.txt", document);
+
+	scene.Create(&engine);
 	scene.Read(document);
 	
 	SDL_Event event;

@@ -26,8 +26,8 @@
 			"type":"GameObject",
 			"name":"Player",
 			"position":[
-				300,
-				400
+				400,
+				300
 			],
 			"scale":1,
 			"angle":45,
@@ -41,12 +41,34 @@
 				{
 					"type":"SpriteComponent",
 					"texture":"cars.png",
+					"origin": [0.5, 0.5],
 					"rect":[
 						64,
 						110,
 						60,
 						112
 					]
+				}
+			]
+		},
+		{
+			"type":"GameObject",
+			"name":"Explosion",
+			"position":[
+				400,
+				300
+			],
+			"scale":1,
+			"angle":0,
+			"Components":[
+				{
+					"type":"SpriteAnimationComponent",
+					"texture":"explosion.png",
+					"origin": [0.5, 0.5],
+					"numX": 5,
+					"numY": 5,
+					"numFrames": 25,
+					"fps": 30
 				}
 			]
 		}

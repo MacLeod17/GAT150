@@ -29,28 +29,32 @@ namespace gk
         SDL_DestroyTexture(m_texture);
     }
 
-    void Texture::Draw(const Vector2& position, const Vector2& scale, const float angle)
+    void Texture::Draw(const Vector2& position, const float angle, const Vector2& scale, const Vector2& origin)
     {
         Vector2 size = GetSize();
         size *= scale;
         
+        Vector2 newPosition = position - (size * origin);
+
         SDL_Rect rect;
-        rect.x = static_cast<int>(position.x);
-        rect.y = static_cast<int>(position.y);
+        rect.x = static_cast<int>(newPosition.x);
+        rect.y = static_cast<int>(newPosition.y);
         rect.w = static_cast<int>(size.x);
         rect.h = static_cast<int>(size.y);
         
         SDL_RenderCopyEx(m_renderer, m_texture, NULL, &rect, angle, NULL, SDL_FLIP_NONE);
     }
 
-    void Texture::Draw(const SDL_Rect& source, const Vector2& position, const Vector2& scale, const float angle)
+    void Texture::Draw(const SDL_Rect& source, const Vector2& position, const float angle, const Vector2& scale, const Vector2& origin)
     {
         Vector2 size = { source.w, source.h };
         size *= scale;
 
+        Vector2 newPosition = position - (size * origin);
+
         SDL_Rect rect;
-        rect.x = static_cast<int>(position.x);
-        rect.y = static_cast<int>(position.y);
+        rect.x = static_cast<int>(newPosition.x);
+        rect.y = static_cast<int>(newPosition.y);
         rect.w = static_cast<int>(size.x);
         rect.h = static_cast<int>(size.y);
 
