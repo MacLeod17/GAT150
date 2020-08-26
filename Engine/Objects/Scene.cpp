@@ -19,10 +19,22 @@ namespace gk
 
 	void Scene::Read(const rapidjson::Value& value)
 	{
-		const rapidjson::Value& objectsValue = value["GameObjects"];
-		if (objectsValue.IsArray())
+		if (value.HasMember("Prototypes"))
 		{
-			ReadGameObjects(objectsValue);
+			const rapidjson::Value& objectsValue = value["Prototypes"];
+			if (objectsValue.IsArray())
+			{
+				ReadPrototypes(objectsValue);
+			}
+		}
+		
+		if (value.HasMember("GameObjects"))
+		{
+			const rapidjson::Value& objectsValue = value["GameObjects"];
+			if (objectsValue.IsArray())
+			{
+				ReadGameObjects(objectsValue);
+			}
 		}
 	}
 
@@ -45,7 +57,28 @@ namespace gk
 				}
 			}
 		}
+	}
 
+	void Scene::ReadPrototypes(const rapidjson::Value& value)
+	{
+		for (rapidjson::SizeType i = 0; i < value.Size(); i++)
+		{
+			const rapidjson::Value& objectValue = value[i];
+			if (objectValue.IsObject())
+			{
+				std::string typeName;
+				json::Get(objectValue, "type", typeName);
+				GameObject* gameObject = ObjectFactory::Instance().Create<GameObject>(typeName);
+
+				if (gameObject)
+				{
+					gameObject->Create(m_engine);
+					gameObject->Read(objectValue);
+					
+					ObjectFactory::Instance().Register(gameObject->m_name, new Prototype<Object>(gameObject));
+				}
+			}
+		}
 	}
 
 	void Scene::Update()
@@ -53,6 +86,21 @@ namespace gk
 		for (auto gameObject : m_gameObjects)
 		{
 			gameObject->Update();
+		}
+
+		auto iter = m_gameObjects.begin();
+		while (iter != m_gameObjects.end())
+		{
+			if ((*iter)->m_flags[GameObject::eFlags::DESTROY])
+			{
+				(*iter)->Destroy();
+				delete (*iter);
+				iter = m_gameObjects.erase(iter);
+			}
+			else 
+			{
+				iter++;
+			}
 		}
 	}
 
@@ -75,6 +123,21 @@ namespace gk
 		}
 
 		return nullptr;
+	}
+
+	std::vector<GameObject*> Scene::FindGameObjectsWithTag(const std::string& tag)
+	{
+		std::vector<GameObject*> gameObjects;
+
+		for (auto gameObject : gameObjects)
+		{
+			if (gameObject->m_tag == tag)
+			{
+				gameObjects.push_back(gameObject);
+			}
+		}
+
+		return gameObjects;
 	}
 
 	void Scene::AddGameObject(GameObject* gameObject)

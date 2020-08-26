@@ -8,10 +8,10 @@ namespace gk
 {
 	void ObjectFactoryImpl::Initialize()
 	{
-		gk::ObjectFactory::Instance().Register("GameObject", gk::Object::Instantiate<gk::GameObject>);
-		gk::ObjectFactory::Instance().Register("PhysicsComponent", gk::Object::Instantiate<gk::PhysicsComponent>);
-		gk::ObjectFactory::Instance().Register("SpriteComponent", gk::Object::Instantiate<gk::SpriteComponent>);
-		gk::ObjectFactory::Instance().Register("SpriteAnimationComponent", gk::Object::Instantiate<gk::SpriteAnimationComponent>);
+		gk::ObjectFactory::Instance().Register("GameObject", new Creator<GameObject, Object>);
+		gk::ObjectFactory::Instance().Register("PhysicsComponent", new Creator<PhysicsComponent, Object>);
+		gk::ObjectFactory::Instance().Register("SpriteComponent", new Creator<SpriteComponent, Object>);
+		gk::ObjectFactory::Instance().Register("SpriteAnimationComponent", new Creator<SpriteAnimationComponent, Object>);
 	}
 }
 

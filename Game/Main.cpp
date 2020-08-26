@@ -16,7 +16,7 @@ int main(int, char**)
 	engine.Startup();
 
 	gk::ObjectFactory::Instance().Initialize();
-	gk::ObjectFactory::Instance().Register("PlayerComponent", gk::Object::Instantiate<gk::PlayerComponent>);
+	gk::ObjectFactory::Instance().Register("PlayerComponent", new gk::Creator<gk::PlayerComponent, gk::Object>);
 
 	rapidjson::Document document;
 	gk::json::Load("scene.txt", document);
@@ -24,8 +24,15 @@ int main(int, char**)
 	scene.Create(&engine);
 	scene.Read(document);
 	
-	SDL_Event event;
+	//for (size_t i = 0; i < 10; i++)
+	//{
+	//	gk::GameObject* gameObject = gk::ObjectFactory::Instance().Create<gk::GameObject>("ProtoExplosion");
+	//	gameObject->m_transform.position = gk::Vector2{ gk::Random(0, 800), gk::Random(0, 600) };
+	//	gameObject->m_transform.angle = gk::Random(0, 360);
+	//	scene.AddGameObject(gameObject);
+	//}
 
+	SDL_Event event;
 	bool quit = false;
 	while (!quit)
 	{

@@ -1,4 +1,30 @@
 {
+	"Prototypes":[
+		{
+			"type":"GameObject",
+			"name":"ProtoExplosion",
+			"tag":"FX",
+			"transient":true,
+			"lifetime":1.5,
+			"position":[
+				400,
+				300
+			],
+			"scale":1,
+			"angle":0,
+			"Components":[
+				{
+					"type":"SpriteAnimationComponent",
+					"texture":"explosion.png",
+					"origin": [0.5, 0.5],
+					"numX": 5,
+					"numY": 5,
+					"numFrames": 25,
+					"fps": 30
+				}
+			]
+		}
+	],
 	"GameObjects":[
 		{
 			"type":"GameObject",
@@ -25,6 +51,7 @@
 		{
 			"type":"GameObject",
 			"name":"Player",
+			"tag":"Player",
 			"position":[
 				400,
 				300
@@ -41,7 +68,10 @@
 				{
 					"type":"SpriteComponent",
 					"texture":"cars.png",
-					"origin": [0.5, 0.5],
+					"origin": [
+						0.5, 
+						0.5
+					],
 					"rect":[
 						64,
 						110,
@@ -52,25 +82,25 @@
 			]
 		},
 		{
-			"type":"GameObject",
+			"type":"ProtoExplosion",
 			"name":"Explosion",
+			"lifetime":4.0,
 			"position":[
-				400,
-				300
+				500,
+				200
 			],
 			"scale":1,
-			"angle":0,
-			"Components":[
-				{
-					"type":"SpriteAnimationComponent",
-					"texture":"explosion.png",
-					"origin": [0.5, 0.5],
-					"numX": 5,
-					"numY": 5,
-					"numFrames": 25,
-					"fps": 30
-				}
-			]
+			"angle":0
+		},
+		{
+			"type":"ProtoExplosion",
+			"name":"Explosion",
+			"position":[
+				200,
+				200
+			],
+			"scale":2,
+			"angle":0
 		}
 	]
 }
