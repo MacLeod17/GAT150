@@ -107,12 +107,27 @@ namespace gk
 
     void GameObject::BeginContact(GameObject* other)
     {
-        std::cout << "Begin: " << other->m_name << std::endl;
+        m_contacts.push_back(other);
     }
 
     void GameObject::EndContact(GameObject* other)
     {
-        std::cout << "End: " << other->m_name << std::endl;
+        m_contacts.remove(other);
+    }
+
+    std::vector<GameObject*> GameObject::GetContactsWithTag(const std::string& tag)
+    {
+        std::vector<GameObject*> contacts;
+        
+        for (GameObject* contact : m_contacts)
+        {
+            if (contact->m_tag == tag)
+            {
+                contacts.push_back(contact);
+            }
+        }
+
+        return contacts;
     }
 
     void GameObject::AddComponent(Component* component)

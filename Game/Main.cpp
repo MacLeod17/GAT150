@@ -26,9 +26,9 @@ int main(int, char**)
 
 	for (size_t i = 0; i < 10; i++)
 	{
-		gk::GameObject* gameObject = gk::ObjectFactory::Instance().Create<gk::GameObject>("ProtoBox");
-		gameObject->m_transform.position = { gk::Random(0, 800), gk::Random(0, 200) };
-		gameObject->m_transform.angle = gk::Random(0, 360);
+		gk::GameObject* gameObject = gk::ObjectFactory::Instance().Create<gk::GameObject>("ProtoCoin");
+		gameObject->m_transform.position = { gk::Random(0, 800), gk::Random(200, 400) };
+		//gameObject->m_transform.angle = gk::Random(0, 360);
 
 		scene.AddGameObject(gameObject);
 	}
