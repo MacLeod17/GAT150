@@ -105,6 +105,16 @@ namespace gk
         }
     }
 
+    void GameObject::BeginContact(GameObject* other)
+    {
+        std::cout << "Begin: " << other->m_name << std::endl;
+    }
+
+    void GameObject::EndContact(GameObject* other)
+    {
+        std::cout << "End: " << other->m_name << std::endl;
+    }
+
     void GameObject::AddComponent(Component* component)
     {
         m_components.push_back(component);

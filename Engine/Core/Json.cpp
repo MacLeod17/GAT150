@@ -11,12 +11,13 @@ namespace gk
             bool success = false;
 
             std::ifstream stream(filename);
-            ASSERT_MSG(stream.good(), "Error Loading JSON File: " + filename);
+            ASSERT_MSG(stream.good(), "Error loading JSON file: " + filename);
             if (stream.is_open())
             {
                 rapidjson::IStreamWrapper istream(stream);
                 document.ParseStream(istream);
                 success = document.IsObject();
+                ASSERT_MSG(success, "Error JSON file is invalid: " + filename);
             }
 
             return success;

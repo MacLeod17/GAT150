@@ -24,6 +24,15 @@ int main(int, char**)
 	scene.Create(&engine);
 	scene.Read(document);
 
+	for (size_t i = 0; i < 10; i++)
+	{
+		gk::GameObject* gameObject = gk::ObjectFactory::Instance().Create<gk::GameObject>("ProtoBox");
+		gameObject->m_transform.position = { gk::Random(0, 800), gk::Random(0, 200) };
+		gameObject->m_transform.angle = gk::Random(0, 360);
+
+		scene.AddGameObject(gameObject);
+	}
+
 	SDL_Event event;
 	bool quit = false;
 	while (!quit)

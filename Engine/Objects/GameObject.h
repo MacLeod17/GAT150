@@ -35,6 +35,9 @@ namespace gk
 		void Update();
 		void Draw();
 
+		void BeginContact(GameObject* other);
+		void EndContact(GameObject* other);
+
 		template <typename T>
 		T* GetComponent()
 		{

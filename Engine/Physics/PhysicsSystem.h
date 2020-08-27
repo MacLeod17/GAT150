@@ -14,6 +14,7 @@ namespace gk
 			Vector2 size;
 			float density{ 0 };
 			float friction{ 1 };
+			float restitution{ 0.3f };
 			bool lockAngle{ false };
 			bool isDynamic{ false };
 		};
@@ -27,6 +28,7 @@ namespace gk
 		b2Body* CreateBody(const Vector2& position, const RigidBodyData& data, GameObject* gameObject);
 
 	protected:
-		b2World* m_world;
+		b2World* m_world{ nullptr };
+		class ContactListener* m_contactListener{ nullptr };
 	};
 }
