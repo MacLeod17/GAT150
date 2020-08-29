@@ -12,6 +12,9 @@
     <Filter Include="Components">
       <UniqueIdentifier>{14399512-5f86-4a3a-af03-dcc8bfa992b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Build">
+      <UniqueIdentifier>{92217687-313b-4dd4-88b4-55d6ed91b66c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -20,10 +23,24 @@
     <ClCompile Include="Components\PlayerComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="TileMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\PlayerComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="TileMap.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Build\scene.txt">
+      <Filter>Build</Filter>
+    </Text>
+    <Text Include="..\Build\tileMap.txt">
+      <Filter>Build</Filter>
+    </Text>
   </ItemGroup>
 </Project>

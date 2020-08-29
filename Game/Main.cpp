@@ -7,6 +7,7 @@
 #include "Objects/Scene.h"
 #include "Components/PlayerComponent.h"
 #include "Core/Json.h"
+#include "TileMap.h"
 
 gk::Engine engine;
 gk::Scene scene;
@@ -24,14 +25,18 @@ int main(int, char**)
 	scene.Create(&engine);
 	scene.Read(document);
 
-	for (size_t i = 0; i < 10; i++)
-	{
-		gk::GameObject* gameObject = gk::ObjectFactory::Instance().Create<gk::GameObject>("ProtoCoin");
-		gameObject->m_transform.position = { gk::Random(0, 800), gk::Random(200, 400) };
-		//gameObject->m_transform.angle = gk::Random(0, 360);
+	gk::TileMap tilemap;
+	gk::json::Load("tileMap.txt", document);
+	tilemap.Read(document);
+	tilemap.Create(&scene);
 
-		scene.AddGameObject(gameObject);
-	}
+	//for (size_t i = 0; i < 10; i++)
+	//{
+	//	gk::GameObject* gameObject = gk::ObjectFactory::Instance().Create<gk::GameObject>("ProtoCoin");
+	//	gameObject->m_transform.position = { gk::Random(0, 800), gk::Random(200, 400) };
+	//	//gameObject->m_transform.angle = gk::Random(0, 360);
+	//	scene.AddGameObject(gameObject);
+	//}
 
 	SDL_Event event;
 	bool quit = false;
