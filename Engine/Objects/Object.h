@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core/EventManager.h"
 #include "Core/Json.h"
 
 namespace gk
