@@ -10,6 +10,7 @@
 namespace gk
 {
 	class Component; //Forward Declaration
+	class Scene;
 	
 	class GameObject : public Object
 	{
@@ -68,7 +69,8 @@ namespace gk
 		std::bitset<32> m_flags;
 
 		Transform m_transform;
-		Engine* m_engine;
+		Engine* m_engine{ nullptr };
+		Scene* m_scene{ nullptr };
 
 	protected:
 		std::vector<Component*> m_components;

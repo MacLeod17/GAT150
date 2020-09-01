@@ -68,6 +68,49 @@
     },
     {
       "type": "GameObject",
+      "name": "ProtoBat",
+      "tag": "Enemy",
+      "transient": false,
+      "position": [
+        400,
+        300
+      ],
+      "scale": 1,
+      "angle": 0,
+      "Components": [
+        {
+          "type": "SpriteAnimationComponent",
+          "texture": "Textures/bat.png",
+          "origin": [
+            0.5,
+            0.5
+          ],
+          "numX": 4,
+          "numY": 1,
+          "numFrames": 4,
+          "fps": 10
+        },
+	{
+	  "type": "EnemyComponent"
+	},
+        {
+          "type": "RigidBodyComponent",
+          "isDynamic": true,
+          "isSensor": true,
+          "lockAngle": false,
+          "size": [
+            16,
+            16
+          ],
+          "density": 1,
+          "friction": 1,
+          "restitution": 0.5,
+	  "gravityScale": 0
+        }
+      ]
+    },
+    {
+      "type": "GameObject",
       "name": "ProtoBox",
       "tag": "Floor",
       "position": [
@@ -174,44 +217,6 @@
     },
     {
       "type": "GameObject",
-      "name": "Ground",
-      "tag": "Floor",
-      "position": [
-        400,
-        450
-      ],
-      "scale": 1,
-      "angle": 0,
-      "Components": [
-        {
-          "type": "SpriteComponent",
-          "texture": "Textures/ground.png",
-          "origin": [
-            0.5,
-            1.5
-          ],
-          "rect": [
-            0,
-            0,
-            800,
-            32
-          ]
-        },
-        {
-          "type": "RigidBodyComponent",
-          "isDynamic": false,
-          "lockAngle": true,
-          "size": [
-            400,
-            16
-          ],
-          "density": 1,
-          "friction": 1
-        }
-      ]
-    },
-    {
-      "type": "GameObject",
       "name": "Player",
       "tag": "Player",
       "position": [
@@ -231,7 +236,8 @@
           ],
           "density": 1,
           "friction": 4,
-          "restitution": 0
+          "restitution": 0,
+	  "gravityScale": 2
         },
         {
           "type": "PlayerComponent"
@@ -251,7 +257,7 @@
         {
           "type": "AudioComponent",
           "sound": "jump.wav",
-          "playOnAwake": true,
+          "playOnAwake": false,
           "loop": false
         }
       ]

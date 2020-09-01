@@ -51,7 +51,7 @@ namespace gk
 				GameObject* gameObject = ObjectFactory::Instance().Create<GameObject>(typeName);
 				if (gameObject)
 				{
-					gameObject->Create(m_engine);
+					gameObject->Create(this);
 					gameObject->Read(objectValue);
 					m_gameObjects.push_back(gameObject);
 				}
@@ -72,7 +72,7 @@ namespace gk
 
 				if (gameObject)
 				{
-					gameObject->Create(m_engine);
+					gameObject->Create(this);
 					gameObject->Read(objectValue);
 					
 					ObjectFactory::Instance().Register(gameObject->m_name, new Prototype<Object>(gameObject));

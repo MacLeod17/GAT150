@@ -24,6 +24,7 @@ namespace gk
         json::Get(value, "friction", m_data.friction);
         json::Get(value, "size", m_data.size);
         json::Get(value, "restitution", m_data.restitution);
+        json::Get(value, "gravityScale", m_data.gravityScale);
     }
 
     void RigidBodyComponent::Update()
@@ -31,6 +32,8 @@ namespace gk
         if (m_body == nullptr)
         {
             m_body = m_owner->m_engine->GetSystem<PhysicsSystem>()->CreateBody(m_owner->m_transform.position, m_owner->m_transform.angle, m_data, m_owner);
+            m_body->SetGravityScale(m_data.gravityScale);
+            m_body->SetLinearDamping(1);
         }
         
         m_owner->m_transform.position = PhysicsSystem::WorldToScreen(m_body->GetPosition());
@@ -43,8 +46,10 @@ namespace gk
 
     void RigidBodyComponent::ApplyForce(const Vector2& force)
     {
-        m_body->SetGravityScale(2.0f);
-        m_body->ApplyForceToCenter(force, true);
+        if (m_body)
+        {
+            m_body->ApplyForceToCenter(force, true);
+        }
     }
 }
 

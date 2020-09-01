@@ -25,7 +25,7 @@ namespace gk
         json::Get(value, "numFrames", m_numFrames);
         json::Get(value, "fps", m_fps);
 
-        m_frameRate = 1.0f / m_fps;
+        m_frameRate = 1.0f / static_cast<float>(m_fps);
     }
 
     void SpriteAnimationComponent::Update()
@@ -46,8 +46,8 @@ namespace gk
 
         m_rect.x = static_cast<int>((m_frame % m_numX) * cellSize.x);
         m_rect.y = static_cast<int>((m_frame / m_numX) * cellSize.y);
-        m_rect.w = cellSize.x;
-        m_rect.h = cellSize.y;
+        m_rect.w = static_cast<int>(cellSize.x);
+        m_rect.h = static_cast<int>(cellSize.y);
     }
 }
 

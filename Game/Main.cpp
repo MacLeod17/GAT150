@@ -6,6 +6,7 @@
 #include "Objects/ObjectFactory.h"
 #include "Objects/Scene.h"
 #include "Components/PlayerComponent.h"
+#include "Components/EnemyComponent.h"
 #include "Core/Json.h"
 #include "TileMap.h"
 
@@ -18,6 +19,7 @@ int main(int, char**)
 
 	gk::ObjectFactory::Instance().Initialize();
 	gk::ObjectFactory::Instance().Register("PlayerComponent", new gk::Creator<gk::PlayerComponent, gk::Object>);
+	gk::ObjectFactory::Instance().Register("EnemyComponent", new gk::Creator<gk::EnemyComponent, gk::Object>);
 
 	rapidjson::Document document;
 	gk::json::Load("scene.txt", document);
@@ -29,14 +31,6 @@ int main(int, char**)
 	gk::json::Load("tileMap.txt", document);
 	tilemap.Read(document);
 	tilemap.Create(&scene);
-
-	//for (size_t i = 0; i < 10; i++)
-	//{
-	//	gk::GameObject* gameObject = gk::ObjectFactory::Instance().Create<gk::GameObject>("ProtoCoin");
-	//	gameObject->m_transform.position = { gk::Random(0, 800), gk::Random(200, 400) };
-	//	//gameObject->m_transform.angle = gk::Random(0, 360);
-	//	scene.AddGameObject(gameObject);
-	//}
 
 	SDL_Event event;
 	bool quit = false;

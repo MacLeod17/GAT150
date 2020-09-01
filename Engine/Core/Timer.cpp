@@ -28,7 +28,7 @@ namespace gk
 
     void FrameTimer::Tick()
     {
-        m_dt = ElapsedSeconds();
+        m_dt = static_cast<float>(ElapsedSeconds());
         m_timepoint = clock::now();
     }
 }
